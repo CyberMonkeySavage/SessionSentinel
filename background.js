@@ -176,6 +176,41 @@ async function addAlert(cookie, cause) {
   updatePauseNotification(state.pausedUntil);
 }
 
+// Manual test alert: fired from the popup's "Test alert" button. Always logs
+// and notifies so you can see exactly what a real detection looks like, even
+// while monitoring is disabled or paused. It writes a clearly-labeled
+// "manual_test" entry and touches no real cookies.
+async function addTestAlert() {
+  const state = await getStorage();
+  const alert = {
+    id: crypto.randomUUID
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random()}`,
+    time: new Date().toISOString(),
+    name: "steamLoginSecure",
+    domain: "steamcommunity.com",
+    value: mask("76561197960000000ABCDEF0123456789"),
+    cause: "manual_test",
+    reason: "test",
+    secure: true,
+    httpOnly: true,
+    sameSite: "no_restriction"
+  };
+  const alerts = [...state.alerts];
+  alerts.unshift(alert);
+  await saveAlerts(alerts);
+  try {
+    await chrome.notifications.create(alert.id, {
+      type: "basic",
+      title: "Session token detected (test)",
+      message: `${alert.name} on ${alert.domain} — ${alert.cause}`,
+      iconUrl: "icon.png"
+    });
+  } catch (e) {
+    console.error("[watchdog] test notification failed:", e);
+  }
+}
+
 chrome.cookies.onChanged.addListener((changeInfo) => {
   try {
     addAlert(changeInfo.cookie, changeInfo.cause);
@@ -196,6 +231,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         },
         "page_js_cookie_write"
       );
+    } else if (message.type === "test_alert") {
+      addTestAlert();
     }
   } catch (e) {
     console.error("[watchdog] message handler error:", e);

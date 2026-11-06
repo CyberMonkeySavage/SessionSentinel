@@ -8,6 +8,7 @@
   const btnRefresh = document.getElementById("btnRefresh");
   const btnClear = document.getElementById("btnClear");
   const btnPause = document.getElementById("btnPause");
+  const btnTest = document.getElementById("btnTest");
 
   let alerts = [];
 
@@ -89,6 +90,15 @@
   }
 
   btnRefresh.addEventListener("click", load);
+
+  btnTest.addEventListener("click", async () => {
+    try {
+      await chrome.runtime.sendMessage({ type: "test_alert" });
+    } catch (e) {
+      // service worker may be waking up; reload shortly either way
+    }
+    setTimeout(load, 300);
+  });
 
   btnClear.addEventListener("click", async () => {
     if (!confirm("Clear all stored alerts? This cannot be undone.")) return;

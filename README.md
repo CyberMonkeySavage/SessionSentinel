@@ -10,6 +10,18 @@ watchdog.
 **Nothing is uploaded, exfiltrated, or sent anywhere.** All logs live in your
 browser's local storage (`chrome.storage.local`) and never leave your machine.
 
+## What an alert looks like
+
+![Session Sentinel alert preview](alert-preview.png)
+
+When a watched cookie changes you get a desktop notification — title **"Session
+token detected"**, followed by the cookie name, domain, and cause. The same
+detection is logged in the extension popup with a masked value and a colored
+**cause** badge (`cookie_changed`, `page_js_cookie_write`, or `baseline`). To
+see exactly what a detection looks like without waiting for one, click the
+**Test alert** button in the popup — it fires a clearly-labeled `manual_test`
+entry and touches no real cookies.
+
 ## Why this exists
 
 Session tokens are "bearer" credentials: whoever holds them is treated as you
