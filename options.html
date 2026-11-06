@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session Sentinel Options</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    max-width: 700px;
+    padding: 24px;
+    background: #0f0f12;
+    color: #eaeaea;
+  }
+  h1 { margin: 0 0 8px; font-size: 18px; color: #66c0ff; }
+  p.sub { margin: 0 0 24px; font-size: 13px; color: #9aa0a6; }
+  section { margin-bottom: 24px; border:1px solid #2a2a33; border-radius:10px; padding:16px; background:#16161a; }
+  h2 { margin:0 0 12px; font-size:14px; color:#9aa0a6; text-transform:uppercase; letter-spacing:.06em; }
+  .row { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .row label { flex:1; }
+  label { font-size:13px; color:#eaeaea; cursor:pointer; user-select:none; }
+  input[type=checkbox] { accent-color:#66c0ff; width:16px; height:16px; }
+  input[type=text] {
+    width:260px; background:#0f0f12; border:1px solid #444; color:#eaeaea;
+    padding:6px 8px; border-radius:6px; font-size:13px;
+  }
+  button {
+    background:#2a2a33; border:1px solid #444; color:#eaeaea;
+    padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px;
+  }
+  button:hover { border-color:#66c0ff; }
+  button.primary { background:#1f6feb; border-color:#1f6feb; }
+  button.primary:hover { background:#165fcc; }
+  button.danger { background:#4b1a1a; border-color:#6b2a2a; }
+  button.danger:hover { background:#6b2a2a; }
+  ul.sens { list-style:none; padding:0; margin:8px 0 0; max-height:260px; overflow-y:auto; }
+  ul.sens li { padding:8px 10px; border-bottom:1px solid #222; font-size:13px; color:#eaeaea; display:flex; justify-content:space-between; align-items:center; }
+  ul.sens li:last-child { border-bottom:none; }
+  ul.sens li .del { color:#ff8a8a; cursor:pointer; }
+  .add { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+  .hint { font-size:12px; color:#6b7280; margin-top:8px; line-height:1.5; }
+  .saved { color:#8fcf8f; font-size:12px; margin-top:6px; display:none; }
+  .domain-enabled { color:#4ade80; font-size:11px; }
+  .domain-disabled { color:#9ca3af; font-size:11px; }
+</style>
+</head>
+<body>
+<h1>Session Sentinel Options</h1>
+<p class="sub">Configure what the extension watches and how it alerts.</p>
+
+<section>
+  <h2>Monitoring</h2>
+  <div class="row">
+    <input type="checkbox" id="toggleEnabled" checked>
+    <label for="toggleEnabled">Enable session-token monitoring</label>
+  </div>
+  <div class="row">
+    <input type="checkbox" id="toggleQuiet">
+    <label for="toggleQuiet">Quiet mode — log alerts, suppress browser notifications</label>
+  </div>
+  <div class="hint">When monitoring is off, no cookie alerts are generated. Existing alerts are kept.</div>
+</section>
+
+<section>
+  <h2>Pause monitoring</h2>
+  <p style="font-size:12px;color:#9aa0a6;margin-bottom:8px;">Temporarily stop alerting without losing stored alerts.</p>
+  <div class="row">
+    <input type="number" id="pauseMinutes" placeholder="Minutes" min="1" max="1440" style="width:120px">
+    <button id="btnPause" class="primary">Pause</button>
+    <button id="btnResume" class="danger" style="display:none">Resume now</button>
+  </div>
+  <div id="pauseInfo" class="hint" style="margin-top:4px">Monitoring is active.</div>
+</section>
+
+<section>
+  <h2>Watched domains</h2>
+  <p style="font-size:12px;color:#9aa0a6;margin-bottom:8px;">Toggle a domain off to stop alerting on cookie changes there. Subdomains are included automatically.</p>
+  <ul id="domainsList" class="sens"></ul>
+  <div class="add">
+    <input type="text" id="newDomain" placeholder="e.g. example.com">
+    <button id="btnAddDomain" class="primary">Add</button>
+  </div>
+</section>
+
+<section>
+  <h2>Sensitive cookie name patterns</h2>
+  <p style="font-size:12px;color:#9aa0a6;margin-bottom:8px;">Alert when a cookie name contains or starts with any of these, on any domain (unless that domain is toggled off above).</p>
+  <ul id="patternsList" class="sens"></ul>
+  <div class="add">
+    <input type="text" id="newPattern" placeholder="e.g. sessionid">
+    <button id="btnAddPattern" class="primary">Add</button>
+  </div>
+  <div class="hint">Prefix matching: entering <code>steamMachineAuth</code> catches <code>steamMachineAuth0</code>…<code>9</code> automatically.</div>
+</section>
+
+<section>
+  <h2>Stored alerts</h2>
+  <div class="row">
+    <button id="btnExport" class="primary">Export alerts (JSON)</button>
+    <button id="btnClear" class="danger">Clear all alerts</button>
+    <button id="btnReset" class="danger">Reset to defaults</button>
+  </div>
+  <div class="hint">Alerts live only in your browser's local storage. Exporting downloads a file to your downloads folder; nothing is uploaded.</div>
+</section>
+
+<p class="saved" id="saved">Saved.</p>
+
+<script src="options.js"></script>
+</body>
+</html>

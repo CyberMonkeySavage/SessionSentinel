@@ -1,0 +1,50 @@
+{
+    "manifest_version":  3,
+    "name":  "Session Sentinel",
+    "version":  "1.2.0",
+    "description":  "Detection-only monitor that alerts you when session/auth cookies appear or change on domains you choose. Logs stay on your computer — nothing is uploaded.",
+    "homepage_url":  "https://github.com/CyberMonkeySavage/SessionSentinel",
+    "icons":  {
+                  "16":  "icon16.svg",
+                  "48":  "icon48.svg",
+                  "128":  "icon128.svg"
+              },
+    "permissions":  [
+                        "cookies",
+                        "storage",
+                        "notifications",
+                        "tabs"
+                    ],
+    "host_permissions":  [
+        "<all_urls>"
+    ],
+    "background":  {
+                       "service_worker":  "background.js",
+                       "type":  "module"
+                   },
+    "action":  {
+                   "default_popup":  "popup.html",
+                   "default_title":  "Session Sentinel"
+               },
+    "options_ui":  {
+                       "page":  "options.html",
+                       "open_in_tab":  true
+                   },
+    "content_scripts":  [
+                            {
+                                "matches":  [
+                                                "https://*.steamcommunity.com/*",
+                                                "https://*.store.steampowered.com/*",
+                                                "https://*.steam.com/*"
+                                            ],
+                                "js":  [
+                                           "content.js"
+                                       ],
+                                "run_at":  "document_end"
+                            }
+                        ],
+    "incognito":  "split",
+    "content_security_policy":  {
+                                    "extension_pages":  "script-src \u0027self\u0027; object-src \u0027self\u0027"
+                                }
+}

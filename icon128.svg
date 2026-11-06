@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <!-- background -->
+  <rect width="128" height="128" rx="30" fill="#0f1115"/>
+  <!-- shield -->
+  <path d="M30 28 L46 20 V56 C46 90 64 104 64 104 S82 90 82 56 V20 L98 28" fill="none" stroke="#3b82f6" stroke-width="7" stroke-linejoin="round"/>
+  <!-- lock shackle -->
+  <path d="M64 34 Q64 26 72 26 Q80 26 80 34 L80 42" fill="none" stroke="#3b82f6" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- lock body -->
+  <path d="M58 42 L70 42 L70 58 L58 58 Z" fill="none" stroke="#3b82f6" stroke-width="7" stroke-linejoin="round"/>
+  <!-- keyhole / eye pupil -->
+  <ellipse cx="64" cy="50" rx="7" ry="5" fill="#60a5fa"/>
+  <circle cx="64" cy="50" r="2.5" fill="#0f1115"/>
+  <!-- session S ribbon hint -->
+  <path d="M54 76 Q56 80 64 80 Q72 80 74 76" fill="none" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+</svg>
